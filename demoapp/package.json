@@ -1,0 +1,11 @@
+{
+  "name": "demoapp",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "bin": {
+    "demoapp": "./bin/index.js"
+  },
+  "dependencies": {
+    "create-nx-workspace": "16.5.5"
+  }
+}
