@@ -1,5 +1,5 @@
 {
-  "name": "my-plugin",
+  "name": "nx-multi-env",
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {},
@@ -35,5 +35,5 @@
     "verdaccio": "^5.0.4"
   },
   "type": "commonjs",
-  "generators": "./generators.json"
+  "executors": "./executors.json"
 }

@@ -9,6 +9,7 @@
     }
   },
   "targetDefaults": {
+    "e2e": {},
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]

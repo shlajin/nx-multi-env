@@ -1,5 +1,5 @@
 {
-  "name": "my-plugin",
+  "name": "nx-multi-env",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "src",
   "projectType": "library",
@@ -8,7 +8,7 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/my-plugin",
+        "outputPath": "dist/nx-multi-env",
         "main": "./src/index.ts",
         "tsConfig": "./tsconfig.lib.json",
         "assets": [
@@ -25,11 +25,6 @@
           },
           {
             "input": ".",
-            "glob": "generators.json",
-            "output": "."
-          },
-          {
-            "input": ".",
             "glob": "executors.json",
             "output": "."
           }
@@ -37,7 +32,7 @@
       }
     },
     "publish": {
-      "command": "node tools/scripts/publish.mjs my-plugin {args.ver} {args.tag}",
+      "command": "node tools/scripts/publish.mjs nx-multi-env {args.ver} {args.tag}",
       "dependsOn": ["build"]
     },
     "local-registry": {
@@ -52,7 +47,11 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["./**/*.ts", "./package.json", "generators.json"]
+        "lintFilePatterns": [
+          "./**/*.ts",
+          "./package.json",
+          "executors.json"
+        ]
       }
     },
     "test": {

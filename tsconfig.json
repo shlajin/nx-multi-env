@@ -14,7 +14,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "my-plugin": ["src/index.ts"]
+      "nx-multi-env": ["src/index.ts"]
     }
   },
   "files": [],
