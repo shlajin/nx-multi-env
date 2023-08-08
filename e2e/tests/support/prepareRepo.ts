@@ -18,7 +18,13 @@ const copyEnvFiles = () => {
     'support',
     'envFiles'
   );
-  const envChainFiles = ['.dev.env', '.prod.env', '.shared.env', '.local.env'];
+  const envChainFiles = [
+    '.dev.env',
+    '.prod.env',
+    '.shared.env',
+    '.local.env',
+    '.custom.env',
+  ];
   envChainFiles.forEach((envFileName) => {
     const mapping = {
       '.': sourceEnvFilesDir,
@@ -62,6 +68,7 @@ const generateSampleApp = () => {
       console.log('LANGUAGE = ' + process.env.NX_LANGUAGE);
       console.log('BUILD_ENV = ' + process.env.NX_BUILD_ENV);
       console.log('REGION = ' + process.env.NX_REGION);
+      console.log('LOCAL = ' + process.env.NX_MY_LOCAL);
     `
   );
 };

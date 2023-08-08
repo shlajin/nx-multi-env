@@ -2,7 +2,9 @@
   "name": "nx-multi-env",
   "version": "0.0.1",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "nx": "nx"
+  },
   "dependencies": {
     "dotenv": "^16.3.1"
   },

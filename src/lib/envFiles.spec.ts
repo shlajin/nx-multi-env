@@ -1,5 +1,9 @@
 import * as path from 'path';
-import { buildEnvFilesChain, mergeEnvFiles } from './envFiles';
+import {
+  buildEnvFilesChain,
+  mergeEnvFiles,
+  rejectExistingEnv,
+} from './envFiles';
 
 describe('mergeEnvFiles', () => {
   // fs.readFile(path.join(path))
@@ -73,5 +77,38 @@ describe('buildEnvFilesChain', () => {
       '.shared.env',
       'apps/myApp/.shared.env',
     ]);
-  })
+  });
+});
+
+describe('rejectExistingEnv', () => {
+  it('returns everything if the existing env is empty', () => {
+    const newEnv = { key: '1', abc: 'cde' };
+    expect(rejectExistingEnv({}, newEnv)).toStrictEqual({
+      envToAppend: newEnv,
+      rejectedKeys: [],
+    });
+  });
+
+  it('rejects the existing keys', () => {
+    expect(
+      rejectExistingEnv(
+        { key: '1', qwe: 'rty', else: 'yes' },
+        { key: '1', abc: 'cde', qwe: 'rty' }
+      )
+    ).toStrictEqual({
+      envToAppend: {
+        abc: 'cde',
+      },
+      rejectedKeys: ['key', 'qwe'],
+    });
+  });
+
+  it('rejects everything', () => {
+    expect(
+      rejectExistingEnv({ a: '1', b: '2', c: '3' }, { a: '1' })
+    ).toStrictEqual({
+      envToAppend: {},
+      rejectedKeys: ['a'],
+    });
+  });
 });

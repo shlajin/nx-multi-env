@@ -72,7 +72,9 @@ describe('print-env', () => {
       noNxColors
     );
 
-    expect(result.stdout).toMatch(/--> \.local.env \(file not found, ignored\)/);
+    expect(result.stdout).toMatch(
+      /--> \.local.env \(file not found, ignored\)/
+    );
     // From shared env
     expect(result.stdout).toMatch(/NX_LANGUAGE=en/);
     expect(result.stdout).toMatch(/NX_APP_NAME=app/);
@@ -80,4 +82,60 @@ describe('print-env', () => {
     // From local env
     expect(result.stdout).toMatch(/NX_MY_LOCAL=1/);
   });
+
+  it('does not overrides ad-hoc env variables and reports about it', async () => {
+    const result = await runNxCommandAsync(
+      `multi-env-print myapp --envChain=dev --extraEnvFiles=.prod.env`,
+      { env: { FORCE_COLOR: 'false', NX_BUILD_ENV: 'stage' } }
+    );
+
+    expect(result.stdout).toContain(
+      'NX_BUILD_ENV=prod  (conflicts with standard env!)'
+    );
+    expect(result.stderr).toContain('Conflicting key(s): "NX_BUILD_ENV"');
+    expect(result.stderr).toContain(
+      'Re-run this command with --printFullEnv for more details'
+    );
+  });
+
+  it('print the correct ad-hoc env variable value if --printFullEnv is passed', async () => {
+    const result = await runNxCommandAsync(
+      `multi-env-print myapp --envChain=dev --extraEnvFiles=.prod.env --printFullEnv`,
+      { env: { FORCE_COLOR: 'false', NX_BUILD_ENV: 'stage' } }
+    );
+
+    expect(result.stdout).toContain(
+      'NX_BUILD_ENV=stage  (conflicts with your nx-multi-env files)'
+    );
+    expect(result.stderr).toContain('Conflicting key(s): "NX_BUILD_ENV"');
+  })
+
+  it('does not override standard env files and reports about it', async () => {
+    const result = await runNxCommandAsync(
+      `multi-env-print myapp --envChain=dev --extraEnvFiles=.custom.env`,
+      noNxColors
+    );
+
+    expect(result.stdout).toContain(
+      'NX_MY_LOCAL=mistakenly-overriden  (conflicts with standard env!)'
+    );
+
+    expect(result.stderr).toContain('Conflicting key(s): "NX_MY_LOCAL"');
+    expect(result.stderr).toContain(
+      'Re-run this command with --printFullEnv for more details'
+    );
+  });
+
+  it('print the correct standard nx env variable value if --printFullEnv is passed', async () => {
+    const result = await runNxCommandAsync(
+      `multi-env-print myapp --envChain=dev --extraEnvFiles=.custom.env --printFullEnv`,
+      noNxColors
+    );
+
+    expect(result.stdout).toContain(
+      'NX_MY_LOCAL=1  (conflicts with your nx-multi-env files)'
+    );
+
+    expect(result.stderr).toContain('Conflicting key(s): "NX_MY_LOCAL"');
+  })
 });
