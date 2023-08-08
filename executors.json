@@ -4,6 +4,12 @@
       "implementation": "./src/executors/run/executor",
       "schema": "./src/executors/run/schema.json",
       "description": "run executor"
+    },
+    "print": {
+      "implementation": "./src/executors/print/executor",
+      "schema": "./src/executors/print/schema.json",
+      "description": "print executor"
     }
+
   }
 }
