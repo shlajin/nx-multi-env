@@ -1,0 +1,26 @@
+name: NX Test and E2E
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.14.0'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Run NX Test
+        run: yarn nx test
+
+      - name: Run NX E2E
+        run: yarn nx e2e e2e

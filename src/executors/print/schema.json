@@ -2,8 +2,21 @@
   "$schema": "http://json-schema.org/schema",
   "version": 2,
   "title": "Print combined env",
-  "description": "",
+  "description": "Print combined envs on screen",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "extraEnvFiles": {
+      "type": "string",
+      "description": "Comma-separated list of env-files to add on top of the env chain files."
+    },
+    "envChain": {
+      "type": "string",
+      "description": "Name of the env to load the env chain files"
+    },
+    "printFullEnv": {
+      "type": "boolean",
+      "description": "Print full and detailed environment, as opposed to printing the env related only to nx-multi-env"
+    }
+  },
   "required": []
 }

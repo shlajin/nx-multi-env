@@ -3,13 +3,12 @@
     "run": {
       "implementation": "./src/executors/run/executor",
       "schema": "./src/executors/run/schema.json",
-      "description": "run executor"
+      "description": "Run any NX command with multiple envs"
     },
     "print": {
       "implementation": "./src/executors/print/executor",
       "schema": "./src/executors/print/schema.json",
-      "description": "print executor"
+      "description": "Print combined envs on screen"
     }
-
   }
 }

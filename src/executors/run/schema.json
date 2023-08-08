@@ -1,9 +1,18 @@
 {
   "$schema": "http://json-schema.org/schema",
   "version": 2,
-  "title": "Run executor",
+  "title": "Run any NX command with multiple envs",
   "description": "",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "extraEnvFiles": {
+      "type": "string",
+      "description": "Comma-separated list of env-files to add on top of the env chain files."
+    },
+    "envChain": {
+      "type": "string",
+      "description": "Name of the env to load the env chain files"
+    }
+  },
   "required": []
 }
