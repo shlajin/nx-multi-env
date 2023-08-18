@@ -37,10 +37,11 @@ const processEnvChain = (projectName: string, envChain?: string) => {
   return mergeEnvFiles(envFilesChain);
 };
 
-export default async function runExecutor(
+export default async function* runExecutor(
   options: RunExecutorSchema,
   context: ExecutorContext
 ) {
+  // Dead code... does not get triggered when you actually forget to pass the command after the project
   if (!options['_'] || !options['_'][0]) {
     output.error({
       title: 'Incorrect multi-env run invocation',
@@ -57,6 +58,7 @@ export default async function runExecutor(
     });
     return { success: false };
   }
+
   const {
     envChain,
     extraEnvFiles,
@@ -64,19 +66,33 @@ export default async function runExecutor(
     ...restOptions
   } = options;
 
+  if (restUnnamedArgs.length > 0) {
+    output.warn({
+      title: 'Detected unexpected additional arguments',
+      bodyLines: [
+        `These arguments are: ${restUnnamedArgs
+          .map((r) => `"${output.colors.red(r)}"`)
+          .join(', ')}`,
+        'These arguments will be ignored. Please file an issue if you need to use them.',
+      ],
+    });
+  }
   const resultingEnv = {
     ...processEnvChain(context.projectName, envChain),
     ...processExtraEnvFiles(extraEnvFiles),
   };
 
   dotenv.populate(process.env, resultingEnv);
+
   const result = await runAnotherExecutor(
     { project: context.projectName, target: target },
-    {}, // TODO: I can specify overrides here if I needed
+    { ...restOptions },
     context
   );
 
   for await (const res of result) {
+    // Proxying response back; important for e2e cypress runner in order to work!
+    yield res;
     if (!res.success) return res;
   }
 
