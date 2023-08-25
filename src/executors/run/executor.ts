@@ -93,7 +93,11 @@ export default async function* runExecutor(
   for await (const res of result) {
     // Proxying response back; important for e2e cypress runner in order to work!
     yield res;
-    if (!res.success) return res;
+    if (!res.success) {
+      // We, probably, should not do anything and just wait until the child generator gracefully finishes.
+      // Otherwise, an error during development 'serve' action might kill the process, instead of waiting until the error is fixed
+      // return res;
+    }
   }
 
   return { success: true };
