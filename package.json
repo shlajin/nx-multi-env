@@ -1,10 +1,11 @@
 {
   "author": "Artem Shlagin",
   "name": "nx-multi-env",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "scripts": {
-    "nx": "nx"
+    "nx": "nx",
+    "publish": "echo Run yarn publish from the dist directory && exit 1"
   },
   "dependencies": {
     "dotenv": "^16.3.1"
