@@ -259,11 +259,36 @@ And inside `your-app/project.json`, add a new target:
       "options": {
         "_": ["serve"],
         "envChain": "app-dev"
+      },
+      "configurations": {
+        "production": {
+          "envChain": "app-prod"
+        }
       }
     },
     ...
 ```
 
+The `envChain` parameter supports basic interpolation from the executor context. For example,
+```
+...
+  "options": {
+    "_": ["serve"],
+    "envChain": "app-${configurationName}"
+  }
+...
+
+the `envChain` will become `app-production` in `production` configuration and `app-development` in development configuration.
+It also supports `|short` operator that will transform `production` into `prod` and `development` into `dev`. You can you it like this:
+ ...
+  "options": {
+    "_": ["serve"],
+    "envChain": "app-${configurationName|short}" // will result in `app-dev` in development configuration.
+  }
+...
+However, I recommend sticking with the explicit `configuration` block as in the example above
+
+```
 ### Env chain naming
 
 Don't forget that NX default env variables always take precedence over the ones added by `nx-multi-env`!

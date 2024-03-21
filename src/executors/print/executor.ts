@@ -5,6 +5,7 @@ import {
   buildEnvFilesChain,
   discardMissingFiles,
   mergeEnvFiles,
+  prepareEnvChainString,
   rejectExistingEnv,
 } from '../../lib/envFiles';
 
@@ -54,8 +55,16 @@ export default async function runExecutor(
   options: RunExecutorSchema,
   context: ExecutorContext
 ) {
-  const { envChain, printFullEnv, extraEnvFiles } = options;
+  const {
+    envChain: envChainUnprocessed,
+    printFullEnv,
+    extraEnvFiles,
+  } = options;
 
+  const envChain = prepareEnvChainString(
+    envChainUnprocessed,
+    context as unknown as Record<string, string>
+  );
   output.note({
     title: printFullEnv
       ? 'Printing full resulting env'

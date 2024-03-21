@@ -7,6 +7,7 @@ import {
   buildEnvFilesChain,
   discardMissingFiles,
   mergeEnvFiles,
+  prepareEnvChainString,
 } from '../../lib/envFiles';
 
 const processExtraEnvFiles = (extraEnvFiles?: string) => {
@@ -60,11 +61,16 @@ export default async function* runExecutor(
   }
 
   const {
-    envChain,
+    envChain: envChainUnprocessed,
     extraEnvFiles,
     _: [target, ...restUnnamedArgs],
     ...restOptions
   } = options;
+
+  const envChain = prepareEnvChainString(
+    envChainUnprocessed,
+    context as unknown as Record<string, string>
+  );
 
   if (restUnnamedArgs.length > 0) {
     output.warn({

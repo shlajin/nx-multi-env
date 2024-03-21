@@ -2,6 +2,7 @@ import * as path from 'path';
 import {
   buildEnvFilesChain,
   mergeEnvFiles,
+  prepareEnvChainString,
   rejectExistingEnv,
 } from './envFiles';
 
@@ -111,4 +112,52 @@ describe('rejectExistingEnv', () => {
       rejectedKeys: ['a'],
     });
   });
+});
+
+describe('prepareEnvChainString', () => {
+  it('does not replace anything if replacements are not specified', () => {
+    expect(prepareEnvChainString('hello-world', undefined)).toBe('hello-world');
+  });
+
+  it('does not replace anything if string has no replacements', () => {
+    expect(prepareEnvChainString('hello-world', { something: 'yes' })).toBe(
+      'hello-world'
+    );
+  });
+
+  it('replaces values', () => {
+    expect(
+      prepareEnvChainString(`hello-\${configurationName}-\${something}`, {
+        something: 'yes',
+        configurationName: 'production',
+        thirdValue: 'no',
+      })
+    ).toBe('hello-production-yes');
+  });
+
+  it('does not replace missing replacements', () => {
+    expect(
+      prepareEnvChainString(`hello-\${there}-\${something}`, {
+        something: 'yes',
+        configurationName: 'production',
+        thirdValue: 'no',
+      })
+    ).toBe(`hello-\${there}-yes`);
+  });
+
+  it('makes the production env name shorter', () => {
+    expect(
+      prepareEnvChainString(`hello-\${configurationName|short}`, {
+        configurationName: 'production',
+      })
+    ).toBe('hello-prod');
+  })
+
+  it('makes the development env name shorter', () => {
+    expect(
+      prepareEnvChainString(`hello-\${configurationName|short}`, {
+        configurationName: 'development',
+      })
+    ).toBe('hello-dev');
+  })
 });
